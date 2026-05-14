@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Ensure CORS is first
 app.use(express.json());
 
 // Routes
@@ -24,11 +24,10 @@ app.use('/api', authMiddleware, apiRoutes);
 // Database Connection
 mongoose
   .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
   })
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Successfully connected to MongoDB Atlas');
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
     });
