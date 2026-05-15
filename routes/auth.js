@@ -29,15 +29,17 @@ router.post('/login', async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // Return user info (excluding password) and token
-    const userObj = user.toObject();
-    delete userObj.password;
-    delete userObj._id;
-    delete userObj.__v;
-
+    // Return only safe user info
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatar: user.avatar
+    };
     res.json({
       token,
-      user: userObj
+      user: safeUser
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -69,13 +71,17 @@ router.post('/google', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
-    const userObj = user.toObject();
-    delete userObj.password;
-    delete userObj._id;
-    delete userObj.__v;
+    // Return only safe user info
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatar: user.avatar
+    };
     res.json({
       token,
-      user: userObj
+      user: safeUser
     });
   } catch (error) {
     console.error('Google login error:', error);
